@@ -1,18 +1,12 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
-# Instalar extensiones de PHP requeridas y herramientas del sistema
+# Instalar dependencias del sistema operativo requeridas para compilar mbstring, xml y sockets en Alpine
 RUN apk add --no-cache \
-    nginx \
-    supervisor \
-    curl \
-    libpng-dev \
+    oniguruma-dev \
     libxml2-dev \
-    zip \
-    unzip \
-    git \
-    oniguruma-dev
+    linux-headers
 
-RUN docker-php-ext-install pdo pdo_mysql bcmath
+RUN docker-php-ext-install pdo_mysql mbstring xml bcmath sockets
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
